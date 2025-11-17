@@ -303,10 +303,7 @@ export default class DietService {
     return this.getDailyLog(userId, normalizedDate);
   }
 
-  async updateMeal(
-    userId: number,
-    input: AddMealInput & { mealId: number }
-  ) {
+  async updateMeal(userId: number, input: AddMealInput & { mealId: number }) {
     if (!input.items.length) {
       throw new Error("Meal items cannot be empty");
     }

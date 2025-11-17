@@ -176,7 +176,7 @@ export default async function DietLogDetailPage({
                 </div>
                 <div className='divide-y divide-neutral-100'>
                   {groupedMeals.map(meal => {
-                    const mealLoggedAt = new Date(meal.createdAt).toLocaleTimeString('en-US', {
+                    const mealLoggedAt = new Date(meal.createdAt).toLocaleTimeString('id-ID', {
                       hour: '2-digit',
                       minute: '2-digit',
                     });

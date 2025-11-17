@@ -93,10 +93,10 @@ export default function MealList({ meals, foods }: MealListProps) {
                   <div className='flex items-center justify-between'>
                     <div className='text-xs text-neutral-500'>
                       Logged at{' '}
-                      {new Date(entry.createdAt).toLocaleTimeString('en-US', {
+                      {new Date(entry.createdAt).toLocaleTimeString('id-ID', {
                         hour: '2-digit',
                         minute: '2-digit',
-                      })}
+                      })} WIB
                     </div>
                     <div className='flex items-center gap-2'>
                       {editButtonWithFallback}
