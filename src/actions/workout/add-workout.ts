@@ -5,6 +5,7 @@ import { addWorkoutSchema } from '@/lib/schemas/add-workout-schema';
 import getUserData from '../auth/profile';
 import { getCurrentDateTimeLocal } from '@/lib/utils';
 import OpenAI from 'openai';
+import DietService from '../diet/DietService';
 
 export async function addWorkout(data: {
   title: string;
@@ -65,6 +66,36 @@ ${JSON.stringify({ title, startTime, endTime, exercises })}
             },
           })),
         },
+      },
+    });
+
+    const today = new Date();
+    const normalizedDate = new Date(
+      Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+    );
+
+    const dietService = new DietService();
+
+    const netCalories = await dietService.recalculateCalories(
+      user.id,
+      normalizedDate
+    );
+
+    await prisma.dailyLog.upsert({
+      where: { userId_date: { userId: user.id, date: normalizedDate } },
+      update: {
+        caloriesIn: 0,
+        caloriesOut: {
+          increment: parseInt(response.output_text) || 0,
+        },
+        netCalories: netCalories?.netCalories,
+      },
+      create: {
+        userId: user.id,
+        date: normalizedDate,
+        caloriesIn: 0,
+        caloriesOut: parseInt(response.output_text) || 0,
+        netCalories: netCalories?.netCalories,
       },
     });
 

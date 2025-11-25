@@ -47,7 +47,7 @@ export default async function WorkoutHistoryPage() {
                   (new Date(workout.endTime).getTime() -
                     new Date(workout.startTime).getTime()) /
                     60000
-                )} min - ${workout.totalCaloriesBurned} cal`}
+                )} min - ${workout.totalCaloriesBurned} cal `}
               </p>
             </div>
           ))}
