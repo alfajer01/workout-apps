@@ -101,7 +101,7 @@ export default function AddWorkoutPlanPage() {
               {fields.map((field, index) => (
                 <div
                   key={field.id}
-                  className='flex items-start gap-3 border rounded-lg p-4 bg-white'
+                  className='flex flex-col md:flex-row items-start gap-3 border rounded-lg p-4 bg-white'
                 >
                   <FormField
                     control={form.control}
@@ -135,7 +135,7 @@ export default function AddWorkoutPlanPage() {
                     type='button'
                     variant='destructive'
                     size='icon'
-                    className='mt-5.5'
+                    className='md:mt-5.5 max-md:w-full'
                     disabled={fields.length === 1}
                     onClick={() => remove(index)}
                   >

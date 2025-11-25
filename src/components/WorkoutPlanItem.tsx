@@ -51,7 +51,7 @@ export default function WorkoutPlanItem({
   };
 
   return (
-    <div className='flex items-center gap-4'>
+    <div className='flex items-center md:gap-4'>
       <Link
         href={`/workout-plan/${plan.id}`}
         className='block p-4 bg-white rounded-lg w-full'

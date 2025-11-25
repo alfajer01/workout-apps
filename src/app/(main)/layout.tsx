@@ -14,7 +14,7 @@ export default async function MainLayout({
   }
 
   return (
-    <div className='container py-10'>
+    <div className='container'>
       <Navbar name={user.name as string} />
       {children}
     </div>

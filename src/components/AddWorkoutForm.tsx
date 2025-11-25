@@ -243,7 +243,7 @@ function ExerciseForm({
           control={control}
           name={`exercises.${exerciseIndex}.order` as const}
           render={({ field }) => (
-            <FormItem className='mt-5.5 w-10'>
+            <FormItem className='mt-5.5 min-w-10 w-10'>
               <FormControl>
                 <Input
                   type='text'
@@ -321,7 +321,7 @@ function ExerciseForm({
                 `exercises.${exerciseIndex}.sets.${setIndex}.order` as const
               }
               render={({ field }) => (
-                <FormItem className='mt-5.5 w-20'>
+                <FormItem className='mt-5.5 min-w-10 w-10'>
                   <FormControl>
                     <Input
                       type='text'
@@ -335,35 +335,39 @@ function ExerciseForm({
               )}
             />
 
-            <FormField
-              control={control}
-              name={`exercises.${exerciseIndex}.sets.${setIndex}.reps` as const}
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormLabel>Reps</FormLabel>
-                  <FormControl>
-                    <Input type='text' min={0} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className='flex flex-col md:flex-row gap-4 md:gap-2 items-start w-full'>
+              <FormField
+                control={control}
+                name={
+                  `exercises.${exerciseIndex}.sets.${setIndex}.reps` as const
+                }
+                render={({ field }) => (
+                  <FormItem className='w-full'>
+                    <FormLabel>Reps</FormLabel>
+                    <FormControl>
+                      <Input type='text' min={0} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={control}
-              name={
-                `exercises.${exerciseIndex}.sets.${setIndex}.weight` as const
-              }
-              render={({ field }) => (
-                <FormItem className='w-full'>
-                  <FormLabel>Weight (kg)</FormLabel>
-                  <FormControl>
-                    <Input type='text' min={0} step={0.1} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={control}
+                name={
+                  `exercises.${exerciseIndex}.sets.${setIndex}.weight` as const
+                }
+                render={({ field }) => (
+                  <FormItem className='w-full'>
+                    <FormLabel>Weight (kg)</FormLabel>
+                    <FormControl>
+                      <Input type='text' min={0} step={0.1} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <Button
               type='button'

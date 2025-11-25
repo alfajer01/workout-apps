@@ -9,7 +9,7 @@ export default async function WorkoutPlanPage() {
 
   return (
     <div className='mt-6 p-6 md:p-10 bg-[#F4F6F6] rounded-2xl'>
-      <div className='flex justify-between items-center'>
+      <div className='flex flex-col md:flex-row md:justify-between md:items-center'>
         <div>
           <h2 className='text-2xl font-semibold'>Your Workout Plan</h2>
           <p className='mt-1 text-sm text-[#A9A9A9]'>
@@ -17,14 +17,14 @@ export default async function WorkoutPlanPage() {
           </p>
         </div>
 
-        <Button asChild variant='default'>
+        <Button asChild variant='default' className='mt-4 md:mt-0'>
           <Link href='/workout-plan/add'>
             <Plus /> Add New Plan
           </Link>
         </Button>
       </div>
 
-      <div className='mt-10'>
+      <div className='mt-6 md:mt-10'>
         {plans.data && plans.data.length === 0 && (
           <div className='text-center text-[#A9A9A9]'>
             <p>No workout plans found.</p>
