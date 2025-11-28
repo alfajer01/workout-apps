@@ -4,7 +4,8 @@ import prisma from '@/lib/prisma';
 import { addWorkoutSchema } from '@/lib/schemas/add-workout-schema';
 import getUserData from '../auth/profile';
 import { getCurrentDateTimeLocal } from '@/lib/utils';
-import OpenAI from 'openai';
+import { generateText } from 'ai';
+import { getModel } from '@/lib/ai/model';
 import DietService from '../diet/DietService';
 
 export async function addWorkout(data: {
@@ -18,7 +19,6 @@ export async function addWorkout(data: {
   }[];
 }) {
   try {
-    const client = new OpenAI();
     const parsed = addWorkoutSchema.safeParse(data);
 
     if (!parsed.success) {
@@ -33,26 +33,27 @@ export async function addWorkout(data: {
       return { success: false, status: 401, message: 'Unauthorized' };
     }
 
-    const response = await client.responses.create({
-      model: 'gpt-5-nano',
-      input: `
-You are a calories estimation engine.
-
-Based ONLY on the data below, estimate the total calories burned for the full workout session.
-Return ONLY a single integer with no words.
-
-Workout:
-${JSON.stringify({ title, startTime, endTime, exercises })}
-`,
+    const { text } = await generateText({
+      model: getModel(),
+      system: 'You are a calories estimation engine. Return ONLY a single integer with no words.',
+      prompt: `
+        Based ONLY on the data below, estimate the total calories burned for the full workout session.
+        
+        Workout:
+        ${JSON.stringify({ title, startTime, endTime, exercises })}
+      `,
     });
 
+    const caloriesBurned = parseInt(text) || 0;
+
+    console.log(caloriesBurned);
     await prisma.workout.create({
       data: {
         userId: user.id,
         title,
         startTime: new Date(startTime),
         endTime: new Date(endTime || getCurrentDateTimeLocal()),
-        totalCaloriesBurned: parseInt(response.output_text) || 0,
+        totalCaloriesBurned: caloriesBurned,
         exercises: {
           create: exercises.map(exercise => ({
             name: exercise.name,
@@ -69,35 +70,22 @@ ${JSON.stringify({ title, startTime, endTime, exercises })}
       },
     });
 
-    const today = new Date();
+    const workoutDate = new Date(startTime);
     const normalizedDate = new Date(
-      Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
+      Date.UTC(
+        workoutDate.getUTCFullYear(),
+        workoutDate.getUTCMonth(),
+        workoutDate.getUTCDate()
+      )
     );
-
     const dietService = new DietService();
-
-    const netCalories = await dietService.recalculateCalories(
-      user.id,
-      normalizedDate
-    );
-
-    await prisma.dailyLog.upsert({
-      where: { userId_date: { userId: user.id, date: normalizedDate } },
-      update: {
-        caloriesIn: 0,
-        caloriesOut: {
-          increment: parseInt(response.output_text) || 0,
-        },
-        netCalories: netCalories?.netCalories,
-      },
-      create: {
-        userId: user.id,
-        date: normalizedDate,
-        caloriesIn: 0,
-        caloriesOut: parseInt(response.output_text) || 0,
-        netCalories: netCalories?.netCalories,
-      },
+    // Pastikan daily log hari terkait ada, lalu tambah kalori keluar dan hitung ulang net.
+    const log = await dietService.getDailyLog(user.id, normalizedDate);
+    await prisma.dailyLog.update({
+      where: { id: log.id },
+      data: { caloriesOut: { increment: caloriesBurned } },
     });
+    await dietService.recalculateCalories(user.id, normalizedDate);
 
     return {
       success: true,
