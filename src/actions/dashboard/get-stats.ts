@@ -93,31 +93,6 @@ export async function getDashboardStats() {
     },
   });
 
-  let motivation = "Ready to crush your goals today? You're doing great! Keep up the momentum.";
-  
-  try {
-    const { generateText } = await import('ai');
-    const { getModel } = await import('@/lib/ai/model');
-    
-    const { text } = await generateText({
-      model: getModel(),
-      system: 'You are a fitness coach. Create a short, punchy, 1-sentence motivational welcome message for the user.',
-      prompt: `
-        User: ${user.name}
-        Workouts today: ${workoutsToday}
-        Streak: ${streak} days
-        Calories burned today: ${Math.round(dailyLog.caloriesOut)}
-        
-        If they have a streak, mention it. If they worked out today, congratulate them. If not, encourage them to start.
-      `,
-    });
-    
-    if (text) motivation = text;
-  } catch (error) {
-    console.error("Failed to generate motivation:", error);
-    // Fallback is already set
-  }
-
   return {
     user,
     caloriesIn: Math.round(dailyLog.caloriesIn),
@@ -126,6 +101,5 @@ export async function getDashboardStats() {
     workoutsToday,
     streak,
     nextWorkout: nextWorkout ? nextWorkout.title : 'No scheduled workout',
-    motivation,
   };
 }

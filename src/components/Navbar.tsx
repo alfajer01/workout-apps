@@ -122,9 +122,8 @@ export default function Navbar({ name }: { name: string }) {
       </Button>
 
       <div
-        className={`absolute lg:hidden  ${
-          open ? 'top-0' : '-top-[100%]'
-        } left-0 w-full bg-white border-b pt-8 pb-4 transition-all duration-300 ease-in-out z-50`}
+        className={`absolute lg:hidden  ${open ? 'top-0' : '-top-[100%]'
+          } left-0 w-full bg-white border-b pt-8 pb-4 transition-all duration-300 ease-in-out z-50`}
       >
         <div className='container flex flex-col gap-4 lg:hidden'>
           <Button

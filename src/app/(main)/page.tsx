@@ -1,9 +1,10 @@
 import { getDashboardStats } from '@/actions/dashboard/get-stats';
 import DashboardMenuCard from '@/components/DashboardMenuCard';
+import MotivationSection from '@/components/MotivationSection';
 import { Activity, Flame, Trophy } from 'lucide-react';
 
 export default async function Home() {
-  const { user, caloriesBurned, netCalories, workoutsToday, streak, nextWorkout, motivation } = await getDashboardStats();
+  const { user, caloriesBurned, netCalories, workoutsToday, streak, nextWorkout } = await getDashboardStats();
 
   const stats = [
     {
@@ -40,9 +41,13 @@ export default async function Home() {
           <h1 className='text-3xl md:text-4xl font-bold mb-4'>
             Welcome back, {user.name}<span className='whitespace-nowrap'>! 👋</span>
           </h1>
-          <p className='text-indigo-100 text-lg mb-8'>
-            {motivation}
-          </p>
+          <MotivationSection
+            userId={user.id}
+            userName={user.name}
+            workoutsToday={workoutsToday}
+            streak={streak}
+            caloriesBurned={caloriesBurned}
+          />
 
           <div className='flex flex-wrap gap-4'>
             <div className='bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20'>
