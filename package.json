@@ -6,6 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "postinstall": "prisma generate",
+    "migrate": "prisma migrate deploy",
     "test:run": "vitest run",
     "test:coverage": "vitest --coverage",
     "test:lib": "vitest run src/lib",
