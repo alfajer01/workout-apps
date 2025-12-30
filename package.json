@@ -8,12 +8,15 @@
     "start": "next start",
     "postinstall": "prisma generate",
     "migrate": "prisma migrate deploy",
+    "seed": "tsx prisma/seed.ts",
+    "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest --coverage",
     "test:lib": "vitest run src/lib",
     "test:actions": "vitest run src/actions",
     "test:auth": "vitest run src/actions/auth",
     "test:workout": "vitest run src/actions/workout",
+    "test:diet-insights": "vitest run src/lib/__tests__/diet-insights.test.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
